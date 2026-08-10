@@ -34,7 +34,7 @@ let rec conc (l1 : 'a list) (l2 : 'a list) : 'a list =
 (*R. 1-6*)
 let rec conc2 (l1 : 'a list) (l2 : 'a list) : 'a list =
   let addup (l3 : 'a list) (x : 'a) : 'a list = x :: l3
-  in List.fold_left (addup) l1 (miroir l2)
+  in List.fold_left (addup) (l2) (miroir l1)
   
 (*R. 1-7*)
 let rec thanos_snap (l : 'a list) (x : 'a) : 'a list =
@@ -57,12 +57,30 @@ let rec coupe2 (l : 'a list) (i : int): 'a list * 'a list =
     else match l with
     |x :: tl -> let l1, l2 = coupe2 tl (i - 1) in l1, x :: l2
     |_ -> l, []
+
+(*R. 1-11*)
+let applat (l: 'a list list): 'a list =
+  let rec applaux (l1 : 'a list list) (lp : 'a list): 'a list =
+    match l1 with
+      |x :: tl -> applaux tl ((List.rev x) @ lp)
+      |[] -> lp
+  in List.rev (applaux l [])
+
+(*R. 1-15*)
+let rec minmax (l : 'a list): 'a * 'a =
+  match l with
+    |x :: [] ->
+    |x :: tl ->
+    |_ -> failwith("liste vide")
+    
 let test0 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: []
-let test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: []
+let test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: []
+let tasty = test0 :: test2 :: []
 let () = assert(der_el test0 = 42)
 let () = assert(der_el2 test0 = Some 42)
 let () = assert(miroir test0 = 42 :: 90 :: 32 :: 67 :: 4 :: 3 :: [])
 let () = assert(miroir2 test0 = 42 :: 90 :: 32 :: 67 :: 4 :: 3 :: [])
-let () = assert(conc test0 test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: [])
-let () = assert(conc2 test0 test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: [])
+let () = assert(conc test0 test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
+let () = assert(conc2 test0 test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
 let () = assert(thanos_snap test0 42 = 3 :: 4 :: 67 :: 32 :: 90 :: [])
+let () = assert(applat tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])

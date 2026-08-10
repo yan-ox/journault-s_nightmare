@@ -69,8 +69,8 @@ let applat (l: 'a list list): 'a list =
 (*R. 1-15*)
 let rec minmax (l : 'a list): 'a * 'a =
   match l with
-    |x :: [] ->
-    |x :: tl ->
+    |x :: [] -> x, x
+    |x :: tl -> let mi, ma = minmax tl in min x mi, max x ma
     |_ -> failwith("liste vide")
     
 let test0 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: []

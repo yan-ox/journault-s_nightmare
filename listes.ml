@@ -73,6 +73,46 @@ let rec minmax (l : 'a list): 'a * 'a =
     |x :: tl -> let mi, ma = minmax tl in min x mi, max x ma
     |_ -> failwith("liste vide")
     
+(*R. 1-16*)
+let rec minmax2 (l : 'a list): 'a * 'a =
+  let rec minmaux (l1 : 'a list) (mi : 'a) (ma :'a): 'a * 'a =
+    match l1 with
+      |x :: tl -> if x < mi then minmaux tl x ma
+      else if x > ma then minmaux tl mi x
+      else minmaux tl mi ma
+      |_ -> mi, ma
+  in
+  match l with
+    |x :: tl -> minmaux l x x
+    |_ -> failwith("liste vide")
+
+(*R. 1-21*)
+let rec tri_fusion (l : 'a list): 'a list =
+  (*fonction de fusion*)
+  let rec fusion (l1 : 'a list) (l2 : 'a list) =
+    match l1, l2 with
+      |[], [] -> []
+      |_, [] -> l1
+      |[], _ -> l2
+      |x :: tl1, y :: tl2 ->
+        if x < y then x :: fusion tl1 l2
+        else y :: fusion l1 tl2
+  in
+  (*fonction de devision*)
+  let rec diviser (l : 'a list): 'a list * 'a list =
+    match l with
+      |[] -> [], []
+      |[x] -> l, []
+      |x :: y :: tl -> let lg, ld = diviser tl in x :: lg, y:: ld
+  in
+  (*fonction principale*)
+  match l with
+    |[] | _ :: [] -> l
+    |_ ->
+      let l1, l2 = diviser l in
+      let l1s, l2s = tri_fusion l1, tri_fusion l2 in
+      fusion l1s l2s
+(*R. 1-22*)
 let test0 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: []
 let test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: []
 let tasty = test0 :: test2 :: []
@@ -84,3 +124,4 @@ let () = assert(conc test0 test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 6
 let () = assert(conc2 test0 test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
 let () = assert(thanos_snap test0 42 = 3 :: 4 :: 67 :: 32 :: 90 :: [])
 let () = assert(applat tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
+let () = assert(tri_fusion test0 = 3 :: 4 :: 32 :: 42 :: 67 :: 90 :: [])

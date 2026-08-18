@@ -15,7 +15,7 @@ let prem_zero2 (tab : int array) : int =
             if tab.(i) = 0 then raise (Found(i))
         done; -1
     with
-        Found(i)-> i
+        |Found(i)-> i
 
 (*R.2-3*)
 (*R.2-4*)

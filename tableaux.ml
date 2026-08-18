@@ -25,6 +25,13 @@ let der_zero (tab : int array) : int =
     done;
     !n
 (*R.2-4*)
+let is_there_zero (tab : int array) : bool =
+    let n = Array.length tab in
+    let i = ref 0 in
+    while (!i < (n-1) && tab.(!i) <> 0) do 
+        i := !i + 1
+    done;
+    tab.(!i) = 0
 (*R.2-5*)
 (*R.2-8*)
 (*R.2-10*)
@@ -37,4 +44,7 @@ let der_zero (tab : int array) : int =
 (*R.2-25*)
 
 let tab = [|3; 5; 4; 0; 1; 2; 0; 9; 8|]
+let tab1 = [|3; 5; 4; 4; 1; 2; 6; 9; 8|]
 let () = assert(der_zero tab = 6)
+let () = assert(is_there_zero tab)
+let () = assert(not (is_there_zero tab1))

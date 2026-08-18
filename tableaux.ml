@@ -54,6 +54,13 @@ let min (tab : int  array) : int =
     done;
     !icache
 (*R.2-10*)
+let accu (tab : int array) : int array =
+    for i = 1 to ((Array.length tab) -1) do
+        begin
+            tab.(i) <- tab.(i)  + tab.(i-1)
+        end
+    done;
+    tab
 (*R.2-15*)
 (*R.2-16*)
 (*R.2-21*)
@@ -70,3 +77,4 @@ let () = assert(not (is_there_zero tab1))
 let () = assert(is_there_zero2 tab)
 let () = assert(not (is_there_zero2 tab1))
 let () = assert(min tab1 = 4)
+let () = assert(accu tab = [|3; 8; 12; 12; 13; 15; 15; 24; 32|])

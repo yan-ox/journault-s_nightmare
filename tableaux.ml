@@ -43,6 +43,16 @@ let is_there_zero2 (tab : int array) : bool =
         |Foundi -> true
 
 (*R.2-8*)
+let min (tab : int  array) : int =
+    let n = Array.length tab in
+    if n = 0 then raise (Invalid_argument "tableau de taille 0") else
+    let cache = ref tab.(0) in
+    let icache = ref 0 in
+    for i = 1 to (n-1) do
+        if tab.(i) < !cache then 
+            begin cache := tab.(i); icache := i end
+    done;
+    !icache
 (*R.2-10*)
 (*R.2-15*)
 (*R.2-16*)
@@ -59,3 +69,4 @@ let () = assert(is_there_zero tab)
 let () = assert(not (is_there_zero tab1))
 let () = assert(is_there_zero2 tab)
 let () = assert(not (is_there_zero2 tab1))
+let () = assert(min tab1 = 4)

@@ -18,6 +18,12 @@ let prem_zero2 (tab : int array) : int =
         |Found(i)-> i
 
 (*R.2-3*)
+let der_zero (tab : int array) : int =
+    let n = ref ((Array.length tab) - 1) in
+    while (!n >= 0 && tab.(!n) <> 0) do
+        n := !n - 1;
+    done;
+    !n
 (*R.2-4*)
 (*R.2-5*)
 (*R.2-8*)
@@ -29,3 +35,6 @@ let prem_zero2 (tab : int array) : int =
 (*R.2-23*)
 (*R.2-24*)
 (*R.2-25*)
+
+let tab = [|3; 5; 4; 0; 1; 2; 0; 9; 8|]
+let () = assert(der_zero tab = 6)

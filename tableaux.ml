@@ -33,6 +33,15 @@ let is_there_zero (tab : int array) : bool =
     done;
     tab.(!i) = 0
 (*R.2-5*)
+exception Foundi
+let is_there_zero2 (tab : int array) : bool =
+    let test (x : int) : unit = if x = 0 then raise Foundi in
+    try 
+        Array.iter (test) tab;
+        false
+    with
+        |Foundi -> true
+
 (*R.2-8*)
 (*R.2-10*)
 (*R.2-15*)
@@ -48,3 +57,5 @@ let tab1 = [|3; 5; 4; 4; 1; 2; 6; 9; 8|]
 let () = assert(der_zero tab = 6)
 let () = assert(is_there_zero tab)
 let () = assert(not (is_there_zero tab1))
+let () = assert(is_there_zero2 tab)
+let () = assert(not (is_there_zero2 tab1))

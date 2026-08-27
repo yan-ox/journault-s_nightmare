@@ -55,14 +55,31 @@ let min (tab : int  array) : int =
     !icache
 (*R.2-10*)
 let accu (tab : int array) : int array =
+    let res = Array.make (Array.length tab) tab.(0) in
     for i = 1 to ((Array.length tab) -1) do
         begin
-            tab.(i) <- tab.(i)  + tab.(i-1)
+            res.(i) <- tab.(i)  + res.(i-1)
         end
     done;
-    tab
+    res
 (*R.2-15*)
+let decale (tab : int array) (g : int) (d : int) : unit =
+    let i = ref d in
+    while !i > g do
+        tab.(!i) <- tab.(!i-1);
+        i := !i - 1
+    done
 (*R.2-16*)
+let tri_inser (tab : int array) : unit =
+    for i = 1 to ((Array.length tab) - 1) do
+        let pos = ref i in
+        let cache = tab.(i) in
+        while (!pos <> 0 && tab.(!pos - 1) > cache) do
+            tab.(!pos) <- tab.(!pos-1);
+            pos := !pos - 1
+        done;
+        tab.(!pos) <- cache
+    done
 (*R.2-21*)
 (*R.2-22*)
 (*R.2-23*)
@@ -78,3 +95,7 @@ let () = assert(is_there_zero2 tab)
 let () = assert(not (is_there_zero2 tab1))
 let () = assert(min tab1 = 4)
 let () = assert(accu tab = [|3; 8; 12; 12; 13; 15; 15; 24; 32|])
+let () = decale tab1 1 6
+let () = assert(tab1 = [|3; 5; 5; 4; 4; 1; 2; 9; 8|])
+let () = tri_inser tab
+let () = assert(tab = [|0; 0; 1; 2; 3; 4; 5; 8; 9|])

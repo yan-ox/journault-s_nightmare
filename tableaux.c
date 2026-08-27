@@ -55,6 +55,17 @@ bool present_0 (tableau t){
     return i< t.taille && t.tab[i] == 0;
 }
 //R.4-6
+int premier_0 (tableau t){
+    int i = 0;
+    while (i < t.taille){
+        if(t.tab[i] == 0){
+            return i;
+        }
+        i++;
+    }
+
+    return -1;
+}
 //R.4-7
 //R.4-10
 //R.4-12
@@ -72,6 +83,8 @@ void main(){
         assert(tab.tab[i] == i + 1);
     }
     assert(!(present_0(tab)));
+    assert(premier_0(tab) == -1);
     tab.tab[3] = 0;
     assert(present_0(tab));
+    assert(premier_0(tab) == 3);
 }

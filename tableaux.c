@@ -66,6 +66,15 @@ int premier_0 (tableau t){
 
     return -1;
 }
+int premier_02 (tableau t){
+    for(int i = 0; i < t.taille; i++){
+        if(t.tab[i] == 0){
+            return i;
+        }
+    }
+
+    return -1;
+}
 //R.4-7
 //R.4-10
 //R.4-12
@@ -84,7 +93,9 @@ void main(){
     }
     assert(!(present_0(tab)));
     assert(premier_0(tab) == -1);
+    assert(premier_02(tab) == -1);
     tab.tab[3] = 0;
     assert(present_0(tab));
     assert(premier_0(tab) == 3);
+    assert(premier_02(tab) == 3);
 }

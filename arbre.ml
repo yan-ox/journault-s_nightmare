@@ -55,6 +55,10 @@ let minmax2 (ab : 'a btree): (int*int) option =
         |N(x, g, d) ->let (mi1, ma1), (mi2, ma2) = minmaux g x x, minmaux d x x in Some(min mi2 mi1, max ma2 ma1 )
         |E -> None
 (*R.3-15*)
+let rec profondb (ab : 'a btree): 'a list =
+    match ab with
+    |N(x, g, d) -> x :: profondb g @ profondb d
+    |E -> [] 
 (*R.3-18*)
 (*R.3-24*)
 

@@ -89,6 +89,26 @@ int mini (tableau t){
     return imin;
 }
 //R.4-12
+int plus_occ (tableau t, int m){
+    int* occ = malloc(sizeof(m));
+    for(int i = 0; i < t.taille; i++){
+        if(occ[t.tab[i]] > 0){
+            occ[t.tab[i]] += 1;
+        }else{
+            occ[t.tab[i]] = 0;
+        }
+    }
+    int max = occ[0];
+    int imax = 0;
+    for(int i = 1; i < m; i++){
+        if(occ[i] > max){
+            max = occ[i];
+            imax = i;
+        }
+    }
+    free(occ);
+    return imax;
+}
 //R.4-16
 //R.4-32
 //R.4-33
@@ -111,4 +131,7 @@ void main(){
     assert(premier_0(tab) == 3);
     assert(premier_02(tab) == 3);
     assert(mini(tab) == 3);
+    int tibi[12] = {3, 4, 8, 3, 5, 4, 8, 4, 4, 3, 2, 9};
+    tableau multi = {.taille = 12, .tab = tibi};
+    assert(plus_occ(multi, 10) == 3);
 }

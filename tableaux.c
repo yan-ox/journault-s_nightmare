@@ -1,5 +1,6 @@
 #include <stdbool.h>
-
+#include <assert.h>
+#include <stdlib.h>
 
 // struct pour les tableaux d'entiers munis de leur taille
 struct tableau_s {
@@ -35,7 +36,24 @@ btableau create_btab (int n){
     return *tab;
 }
 //R.4-2
+tableau create_tab (int n){
+    tableau* tab = malloc(sizeof(tableau));
+    tab->taille = n;
+    tab->tab = malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++){
+        tab->tab[i] = i + 1;
+    }
+    return *tab;
+}
 //R.4-4
+bool present_0 (tableau t){
+    int i = 0;
+    while (i < t.taille && t.tab[i] != 0){
+        i++;
+    }
+
+    return i< t.taille && t.tab[i] == 0;
+}
 //R.4-6
 //R.4-7
 //R.4-10
@@ -43,3 +61,17 @@ btableau create_btab (int n){
 //R.4-16
 //R.4-32
 //R.4-33
+
+void main(){
+    btableau btab = create_btab(7);
+    for(int i = 0; i < btab.taille; i++){
+        assert(!btab.tab[i]);
+    }
+    tableau tab = create_tab(7);
+    for(int i = 0; i < btab.taille; i++){
+        assert(tab.tab[i] == i + 1);
+    }
+    assert(!(present_0(tab)));
+    tab.tab[3] = 0;
+    assert(present_0(tab));
+}

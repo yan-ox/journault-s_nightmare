@@ -141,7 +141,22 @@ bool dicho_(tableau t, int p){
     return dichotrec(t, 0, t.taille, p);
 }
 //R.4-33
-
+bool dichot(tableau t, int p){
+    int g = 0;
+    int d = t.taille;
+    bool found = false;
+    while(g <= d && !found){
+        int mid = (g + d)/2;
+        if(t.tab[mid] == p){
+            found = true;
+        }else if(t.tab[mid] < p){
+            d = mid - 1;
+        }else{
+            g = mid + 1;
+        }
+    }
+    return found;
+}
 void main(){
     btableau btab = create_btab(7);
     for(int i = 0; i < btab.taille; i++){
@@ -165,4 +180,6 @@ void main(){
     assert(plus_occ(multi, 10) == 3);
     assert(dicho_(multi, 8));
     assert(!dicho_(multi, 1));
+    assert(dichot(multi, 8));
+    assert(!dichot(multi, 1));
 }

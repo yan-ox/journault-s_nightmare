@@ -45,6 +45,15 @@ let rec minmax (ab : 'a btree): (int*int) option =
         end
         |E -> None
 (*R.3-8*)
+let minmax2 (ab : 'a btree): (int*int) option =
+    let rec minmaux (ab : 'a btree) (mini : int) (maxi : int) : int*int =
+        match ab with
+            |N(x, g, d) -> let (mi1, ma1), (mi2, ma2) = minmaux g (min mini x) (max x maxi), minmaux d (min mini x) (max x maxi) in (min mi2 mi1, max ma2 ma1 )
+            |_ -> mini, maxi
+    in 
+    match ab with
+        |N(x, g, d) ->let (mi1, ma1), (mi2, ma2) = minmaux g x x, minmaux d x x in Some(min mi2 mi1, max ma2 ma1 )
+        |E -> None
 (*R.3-15*)
 (*R.3-18*)
 (*R.3-24*)
@@ -54,3 +63,4 @@ let ab = N(1, N(2, N(4, E, E), E), N(3, E, E))
 let () = assert(tailleg ag = 4)
 let () = assert(est_present ab 3)
 let () = assert(minmax ab = Some(1, 4))
+let () = assert(minmax2 ab = Some(1, 4))

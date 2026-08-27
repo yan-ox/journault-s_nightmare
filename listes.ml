@@ -66,6 +66,10 @@ let applat (l: 'a list list): 'a list =
       |[] -> lp
   in List.rev (applaux l [])
 
+let rec apaugustin (l: 'a list list): 'a list =
+  match l with
+    |[] -> []
+    |x :: tl -> x @ apaugustin tl
 (*R. 1-15*)
 let rec minmax (l : 'a list): 'a * 'a =
   match l with

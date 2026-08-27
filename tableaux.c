@@ -23,6 +23,17 @@ struct btableau_s {
 typedef struct btableau_s btableau;
 
 //R.4-1
+btableau create_btab (int n){
+    btableau* tab = malloc(sizeof(btableau));
+    tab->taille = n;
+    tab->tab = malloc(n * sizeof(bool));
+    int i = 0;
+    while (i < n){
+        tab->tab[i] = false;
+        i ++;
+    }
+    return *tab;
+}
 //R.4-2
 //R.4-4
 //R.4-6

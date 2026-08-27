@@ -66,6 +66,7 @@ int premier_0 (tableau t){
 
     return -1;
 }
+//R.4-7
 int premier_02 (tableau t){
     for(int i = 0; i < t.taille; i++){
         if(t.tab[i] == 0){
@@ -75,8 +76,18 @@ int premier_02 (tableau t){
 
     return -1;
 }
-//R.4-7
 //R.4-10
+int mini (tableau t){
+    int imin = 0;
+    int min = t.tab[0];
+    for(int i = 0; i < t.taille; i++){
+        if(t.tab[i] < min){
+            min = t.tab[i];
+            imin = i;
+        }
+    }
+    return imin;
+}
 //R.4-12
 //R.4-16
 //R.4-32
@@ -94,8 +105,10 @@ void main(){
     assert(!(present_0(tab)));
     assert(premier_0(tab) == -1);
     assert(premier_02(tab) == -1);
+    assert(mini(tab) == 0);
     tab.tab[3] = 0;
     assert(present_0(tab));
     assert(premier_0(tab) == 3);
     assert(premier_02(tab) == 3);
+    assert(mini(tab) == 3);
 }

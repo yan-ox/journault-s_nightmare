@@ -91,12 +91,11 @@ int mini (tableau t){
 //R.4-12
 int plus_occ (tableau t, int m){
     int* occ = malloc(sizeof(m));
+    for(int i = 0; i < m; i++){
+        occ[i] = 0;
+    }
     for(int i = 0; i < t.taille; i++){
-        if(occ[t.tab[i]] > 0){
-            occ[t.tab[i]] += 1;
-        }else{
-            occ[t.tab[i]] = 0;
-        }
+        occ[t.tab[i]] += 1;
     }
     int max = occ[0];
     int imax = 0;
@@ -125,6 +124,22 @@ tabtab elargi(tableau t){
     return *out;
 }
 //R.4-32
+bool dichotrec(tableau t, int g, int d, int p){
+    if(g >= d){
+        return t.tab[g] == p;
+    }
+    int mid = (g + d)/2;
+    if(t.tab[mid] == p){
+        return true;
+    }else if(t.tab[mid] > p){
+        return dichotrec(t, g, mid-1, p);
+    }else{
+        return dichotrec(t, mid+1, d, p);
+    }
+}
+bool dicho_(tableau t, int p){
+    return dichotrec(t, 0, t.taille, p);
+}
 //R.4-33
 
 void main(){
@@ -148,4 +163,6 @@ void main(){
     int tibi[12] = {3, 4, 8, 3, 5, 4, 8, 4, 4, 3, 2, 9};
     tableau multi = {.taille = 12, .tab = tibi};
     assert(plus_occ(multi, 10) == 3);
+    assert(dicho_(multi, 8));
+    assert(!dicho_(multi, 1));
 }

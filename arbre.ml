@@ -68,10 +68,19 @@ let largeurb (ab : 'a btree): 'a list =
             |E -> l
     in List.rev (largaux ab [] q)
 (*R.3-24*)
+let est_parfait (ab : 'a btree): bool =
+    let rec parfaux (ab : 'a btree) (prof : int): int =
+        match ab with
+            |N(_, g, d) -> let pg, pd = parfaux g (prof + 1), parfaux d (prof + 1) in
+                if pg = pd then pg else -2
+            |E -> prof
+    in not (parfaux ab (-1) = -2)
 let ag = GN(1, [GN(2, [GN(4, [])]); GN(3, [])])
 let ab = N(1, N(2, N(4, E, E), E), N(3, E, E))
+let abp = N(1, N(2, E, E), N(3, E, E))
 let () = assert(tailleg ag = 4)
 let () = assert(est_present ab 3)
 let () = assert(minmax ab = Some(1, 4))
 let () = assert(minmax2 ab = Some(1, 4))
 let () = assert(largeurb ab = [1; 2; 3; 4])
+let () = assert((est_parfait abp))

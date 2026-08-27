@@ -110,6 +110,20 @@ int plus_occ (tableau t, int m){
     return imax;
 }
 //R.4-16
+tabtab elargi(tableau t){
+    tabtab* out = malloc(sizeof(tabtab));
+    out->taille = t.taille;
+
+    out->tab = malloc(out->taille * sizeof(tableau));
+    for(int i = 0; i < out->taille; i++){
+        out->tab[i].tab = malloc(t.tab[i] * sizeof(int));
+        out->tab[i].taille = t.taille;
+        for(int j = 0; j < t.tab[i]; j++){
+            out->tab[i].tab[j] = 0;
+        }
+    }
+    return *out;
+}
 //R.4-32
 //R.4-33
 

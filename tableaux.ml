@@ -81,13 +81,24 @@ let tri_inser (tab : int array) : unit =
         tab.(!pos) <- cache
     done
 (*R.2-21*)
+let list_to_string (l : char list): string =
+    let rec straux (l : char list) (s : string): string =
+        match l with
+            |x :: tl -> straux tl (s ^ String.make 1 x)
+            |_ -> s
+    in straux l ""
 (*R.2-22*)
+let string_to_list (s : string): char list =
+    List.rev (String.fold_left (fun acc el -> el :: acc) [] s)
 (*R.2-23*)
+let string_to_int (s : string): int =
 (*R.2-24*)
 (*R.2-25*)
 
 let tab = [|3; 5; 4; 0; 1; 2; 0; 9; 8|]
 let tab1 = [|3; 5; 4; 4; 1; 2; 6; 9; 8|]
+let mot = ['o'; 'u'; 'i']
+let mots = "oui"
 let () = assert(der_zero tab = 6)
 let () = assert(is_there_zero tab)
 let () = assert(not (is_there_zero tab1))
@@ -99,3 +110,5 @@ let () = decale tab1 1 6
 let () = assert(tab1 = [|3; 5; 5; 4; 4; 1; 2; 9; 8|])
 let () = tri_inser tab
 let () = assert(tab = [|0; 0; 1; 2; 3; 4; 5; 8; 9|])
+let () = assert(string_to_list mots = mot)
+let () = assert(list_to_string mot = mots)

@@ -91,14 +91,55 @@ let list_to_string (l : char list): string =
 let string_to_list (s : string): char list =
     List.rev (String.fold_left (fun acc el -> el :: acc) [] s)
 (*R.2-23*)
-let string_to_int (s : string): int =
+exception Lettre 
+let string_to_int (s : string): int option=
+    let acc = ref ((int_of_char s.[0])  - (int_of_char '0')) in
+    let n = String.length s in
+    try
+        for i = 1 to (n-1) do
+            if s.[i] >= '0'&& s.[i] <='9'then
+                acc := !acc * 10 + (int_of_char s.[i]) - (int_of_char '0')
+            else
+                raise(Lettre)
+        done;
+        Some !acc
+    with
+        |Lettre -> None
 (*R.2-24*)
+let dichot (t : int array) (p : int): bool =
+    let rec dicaux (t : int array) (p : int) (mini : int) (maxi :int): bool =
+        if mini >= maxi && not (p = t.(mini)) then false else
+        let mid = (mini + maxi) / 2 in
+        if p = t.(mid) then
+            true
+        else if p < t.(mid) then
+            dicaux t p mini mid
+        else 
+            dicaux t p mid maxi
+    in dicaux t p 0 ((Array.length t) - 1)
 (*R.2-25*)
+
+
+
+let rec expo (n : int) (x : int) : int =
+    if n = 0 then
+        1
+    else
+    let oui = (expo (n/2) x) in
+    if n mod 2 = 0 then
+        oui * oui
+    else
+        oui * oui * x
+
+
+
+
 
 let tab = [|3; 5; 4; 0; 1; 2; 0; 9; 8|]
 let tab1 = [|3; 5; 4; 4; 1; 2; 6; 9; 8|]
 let mot = ['o'; 'u'; 'i']
 let mots = "oui"
+let nombre = "123"
 let () = assert(der_zero tab = 6)
 let () = assert(is_there_zero tab)
 let () = assert(not (is_there_zero tab1))
@@ -112,3 +153,6 @@ let () = tri_inser tab
 let () = assert(tab = [|0; 0; 1; 2; 3; 4; 5; 8; 9|])
 let () = assert(string_to_list mots = mot)
 let () = assert(list_to_string mot = mots)
+let () = let f x = match x with |Some a -> a |_ -> -1 in print_int(f (string_to_int nombre))
+let () = assert(string_to_int nombre = Some 123)
+let () = assert(dichot tab 1)

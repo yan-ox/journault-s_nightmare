@@ -118,8 +118,17 @@ let dichot (t : int array) (p : int): bool =
             dicaux t p mid maxi
     in dicaux t p 0 ((Array.length t) - 1)
 (*R.2-25*)
-
-
+let dichot2 (t : int array) (p : int): bool =
+    let mini, maxi = ref 0, ref ((Array.length t) - 1)in
+    let mid = ref ((!mini + !maxi) / 2) in
+    while !mini < !maxi && not (p = t.(!mid)) do
+        mid := (!mini + !maxi) / 2;
+        if p < t.(!mid) then
+            maxi := !mid -1 
+        else 
+            mini := !mid + 1
+    done;
+    p = t.(!mid)
 
 let rec expo (n : int) (x : int) : int =
     if n = 0 then
@@ -156,3 +165,4 @@ let () = assert(list_to_string mot = mots)
 let () = let f x = match x with |Some a -> a |_ -> -1 in print_int(f (string_to_int nombre))
 let () = assert(string_to_int nombre = Some 123)
 let () = assert(dichot tab 1)
+let () = assert(dichot2 tab 1)

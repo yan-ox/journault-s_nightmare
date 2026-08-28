@@ -61,10 +61,19 @@ liste_c n_premier(int n){
     return l;
 }
 //R.5-8
+void free_list(liste_c l){
+    cell* c = l;
+    while (l != NULL){
+        c = l->next;
+        free(l);
+        l = c;
+    }
+}
 //R.5-9
 //R.5-11
 
 void main(){
     liste_c l = n_premier(7);
     affiche_list(l);
+    free_list(l);
 }

@@ -28,6 +28,12 @@ struct s_cell {
 typedef cell* liste_c;
 
 //R.5-5
+liste_c create_list(int x){
+    liste_c* l = malloc(sizeof(liste_c));
+    (*l)->val = x;
+    (*l)->next = NULL;
+    return *l;
+}
 //R.5-6
 //R.5-7
 //R.5-8

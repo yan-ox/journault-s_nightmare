@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 //R.5-1
 typedef struct simple_chain {
@@ -35,6 +36,19 @@ liste_c create_list(int x){
     return *l;
 }
 //R.5-6
+void affiche_list(liste_c l){
+    cell* cache = l;
+    printf("[");
+    while(cache != NULL){
+        if(cache->next == NULL){
+            printf("%d", cache->val);
+        }else{
+            printf("%d, ", cache->val);
+        }
+        cache = cache->next;
+    }
+    printf("]\n");
+}
 //R.5-7
 //R.5-8
 //R.5-9

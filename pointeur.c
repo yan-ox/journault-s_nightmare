@@ -70,10 +70,24 @@ void free_list(liste_c l){
     }
 }
 //R.5-9
+liste_c list_from_tab(int* t, int n){
+    if (n == 0){return NULL;}
+    liste_c l = create_cell(t[0]);
+    cell* c = l;
+    for(int i = 1; i < n; i++){
+        c->next = create_cell(t[i]);
+        c = c->next;
+    }
+    return l;
+}
 //R.5-11
 
 void main(){
     liste_c l = n_premier(7);
     affiche_list(l);
     free_list(l);
+    int t[8] = {4, 5, 7, 86, 5, 3, 2, 98};
+    liste_c l2 = list_from_tab(t, 8);
+    affiche_list(l2);
+    free_list(l2);
 }

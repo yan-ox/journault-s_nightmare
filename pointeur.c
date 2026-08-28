@@ -81,13 +81,29 @@ liste_c list_from_tab(int* t, int n){
     return l;
 }
 //R.5-11
+liste_c list_fus(liste_c l1, liste_c l2){
+    cell* l3 = l2;
+    cell* c1 = l1;
+    while(c1 != NULL){
+        cell* c2 = create_cell(c1->val);
+        c2->next = l3;
+        l3 = c2;
+        c1 = c1->next;
+    }
+    return l3;
+}
 
 void main(){
     liste_c l = n_premier(7);
     affiche_list(l);
-    free_list(l);
     int t[8] = {4, 5, 7, 86, 5, 3, 2, 98};
     liste_c l2 = list_from_tab(t, 8);
     affiche_list(l2);
+    affiche_list(l);
+    liste_c l3 = list_fus(l, l2);
+    affiche_list(l);
+    affiche_list(l2);
+    affiche_list(l3);
+    free_list(l);
     free_list(l2);
 }

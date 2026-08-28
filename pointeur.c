@@ -29,11 +29,11 @@ struct s_cell {
 typedef cell* liste_c;
 
 //R.5-5
-liste_c create_list(int x){
-    liste_c* l = malloc(sizeof(liste_c));
-    (*l)->val = x;
-    (*l)->next = NULL;
-    return *l;
+cell* create_cell(int x){
+    cell* l = malloc(sizeof(cell));
+    l->val = x;
+    l->next = NULL;
+    return l;
 }
 //R.5-6
 void affiche_list(liste_c l){
@@ -50,6 +50,21 @@ void affiche_list(liste_c l){
     printf("]\n");
 }
 //R.5-7
+liste_c n_premier(int n){
+    if (n == 0){return NULL;}
+    liste_c l = create_cell(0);
+    cell* c = l;
+    for(int i = 1; i < n; i++){
+        c->next = create_cell(i);
+        c = c->next;
+    }
+    return l;
+}
 //R.5-8
 //R.5-9
 //R.5-11
+
+void main(){
+    liste_c l = n_premier(7);
+    affiche_list(l);
+}

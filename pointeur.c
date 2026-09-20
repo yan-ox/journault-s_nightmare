@@ -95,6 +95,26 @@ liste_c list_from_tab(int* t, int n){
     }
     return l;
 }
+//R.5-10
+int long_list(liste_c l){
+    int cpt = 0;
+    liste_c l1 = l;
+    while (l1 != NULL){
+        cpt += 1;
+        l1 = l1->next;
+    }
+    return cpt;
+}
+int* tab_from_list(liste_c l){
+    int n = long_list(l);
+    int* t = malloc(n * sizeof(int));
+    liste_c l1 = l;
+    for(int i = 0; i < n; i ++){
+        t[i] = l1->val;
+        l1 = l1->next;
+    }
+    return t;
+}
 //R.5-11
 liste_c list_fus(liste_c l1, liste_c l2){
     cell* l3 = l2;

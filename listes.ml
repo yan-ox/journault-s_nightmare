@@ -58,6 +58,15 @@ let rec coupe2 (l : 'a list) (i : int): 'a list * 'a list =
     |x :: tl -> let l1, l2 = coupe2 tl (i - 1) in l1, x :: l2
     |_ -> l, []
 
+(*R. 1-10*)
+let segregation (l: 'a list): 'a list * 'a list =
+  let rec segraux (l: 'a list)(l0: 'a list)(l1: 'a list)(cpt: int): 'a list * 'a list=
+    match l with
+    |x :: tl -> if cpt mod 2 = 0 then segraux tl (x :: l0) l1 (cpt + 1)
+      else segraux tl l0 (x :: l1) (cpt + 1)
+    |_ -> List.rev l0, List.rev l1
+  in segraux l [] [] 0
+
 (*R. 1-11*)
 let applat (l: 'a list list): 'a list =
   let rec applaux (l1 : 'a list list) (lp : 'a list): 'a list =
@@ -90,6 +99,19 @@ let rec minmax2 (l : 'a list): 'a * 'a =
     |x :: tl -> minmaux l x x
     |_ -> failwith("liste vide")
 
+(*R. 1-18*)
+let souseq_crois (l : int list): int list list =
+  let rec sousaux (l : int list)(sl : int list): int list * int list =
+    match l , sl with
+    |x :: tl, y :: _  when x >= y -> sousaux tl (x :: sl)
+    |x :: tl, [] -> sousaux tl (x :: sl)
+    |_ -> l , List.rev sl
+  in let rec grosaux (l : int list)(sll : int list list):int list list =
+    match l with
+    |[] -> List.rev sll
+    |_ -> let l1, l2 = sousaux l [] in grosaux l1 (l2 :: sll)
+  in grosaux l []
+
 (*R. 1-21*)
 let rec tri_fusion (l : 'a list): 'a list =
   (*fonction de fusion*)
@@ -117,6 +139,20 @@ let rec tri_fusion (l : 'a list): 'a list =
       let l1s, l2s = tri_fusion l1, tri_fusion l2 in
       fusion l1s l2s
 (*R. 1-22*)
+type 'a file = 'a list * 'a list
+
+let file_vide: 'a file = ([], [])
+
+let est_vide(f: 'a file):bool = f = ([], [])
+
+let enfile (e: 'a) (f: 'a file): 'a file=
+  let (g, d) = f in (e :: g, d)
+
+let rec defile (f: 'a file): 'a *'a file =
+  match f with
+    |[], [] -> failwith "pile"
+    |g, x :: d' -> x, (g, d')
+    |g, [] -> defile([], List.rev g)
 let test0 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: []
 let test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: []
 let tasty = test0 :: test2 :: []
@@ -129,3 +165,5 @@ let () = assert(conc2 test0 test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 
 let () = assert(thanos_snap test0 42 = 3 :: 4 :: 67 :: 32 :: 90 :: [])
 let () = assert(applat tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
 let () = assert(tri_fusion test0 = 3 :: 4 :: 32 :: 42 :: 67 :: 90 :: [])
+let () = assert(segregation test0 = (3 :: 67 :: 90 :: [], 4 :: 32 :: 42 :: []))
+let () = assert(souseq_crois test0 = [[3; 4; 67]; [32; 90]; [42]])

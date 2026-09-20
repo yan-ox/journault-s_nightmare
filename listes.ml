@@ -112,6 +112,12 @@ let souseq_crois (l : int list): int list list =
     |_ -> let l1, l2 = sousaux l [] in grosaux l1 (l2 :: sll)
   in grosaux l []
 
+(*R. 1-20*)
+let sort_map(l: 'a list)(k : int)(f: 'a->int): 'a list=
+  let arr = Array.make (k + 1) [] in
+  List.iter (fun x -> let i = f x in arr.(i) <- x :: arr.(i)) l;
+  let sl = Array.to_list arr in List.flatten sl
+
 (*R. 1-21*)
 let rec tri_fusion (l : 'a list): 'a list =
   (*fonction de fusion*)

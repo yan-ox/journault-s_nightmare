@@ -42,6 +42,15 @@ let is_there_zero2 (tab : int array) : bool =
     with
         |Foundi -> true
 
+(*R. 2-6*)
+let sum (tab : int array): int=
+    let n = Array.length tab in
+    let acc = ref tab.(0) in
+    for i = 1 to (n - 1) do 
+        acc := !acc + tab.(i)
+    done;
+    !acc
+
 (*R.2-8*)
 let min (tab : int  array) : int =
     let n = Array.length tab in
@@ -69,6 +78,13 @@ let decale (tab : int array) (g : int) (d : int) : unit =
         tab.(!i) <- tab.(!i-1);
         i := !i - 1
     done
+
+(*R. 2-11*)
+let add_ind(tab : int list array): unit =
+    for i = 0 to (Array.length tab - 1) do 
+        tab.(i) <- i :: tab.(i)
+    done 
+
 (*R.2-16*)
 let tri_inser (tab : int array) : unit =
     for i = 1 to ((Array.length tab) - 1) do
@@ -166,3 +182,4 @@ let () = let f x = match x with |Some a -> a |_ -> -1 in print_int(f (string_to_
 let () = assert(string_to_int nombre = Some 123)
 let () = assert(dichot tab 1)
 let () = assert(dichot2 tab 1)
+let () = assert(sum tab = 32)

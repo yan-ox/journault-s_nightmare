@@ -14,6 +14,21 @@ typedef struct double_chain {
     struct double_chain* suiv;
     struct double_chain* av;
 }chain2;
+//R.5-3
+typedef struct intstring_chain_s {
+    int etiqint;
+    char* etiqstring;
+    struct intstring_chain_s* suiv;
+}intstring_chain;
+typedef intstring_chain* intstring_list;
+//R.5-4
+typedef struct inttab_chain_s {
+    int etiqint;
+    int* etiqtab;
+    struct inttab_chain_s* suiv;
+}inttab_chain;
+typedef inttab_chain* inttab_list;
+
 typedef struct liste2_s{
     chain2* debut;
     chain2* fin;

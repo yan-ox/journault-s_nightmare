@@ -1,6 +1,8 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <math.h>
+#include <time.h>
 
 // struct pour les tableaux d'entiers munis de leur taille
 struct tableau_s {
@@ -44,6 +46,18 @@ tableau create_tab (int n){
         tab->tab[i] = i + 1;
     }
     return *tab;
+}
+//R.4-3
+tableau rand_betw(int n, int a, int b){
+    srand( time(NULL) );
+    int* arr = malloc(n * sizeof(int));
+    for(int i = 0; i < n; i ++){
+        arr[i] = rand() % (abs(a) + abs(b) + 1) + a;
+    }
+    tableau tab;
+    tab.taille = n;
+    tab.tab = arr;
+    return tab;
 }
 //R.4-4
 bool present_0 (tableau t){
@@ -123,6 +137,8 @@ tabtab elargi(tableau t){
     }
     return *out;
 }
+//R.4-18
+
 //R.4-32
 bool dichotrec(tableau t, int g, int d, int p){
     if(g >= d){
@@ -166,6 +182,7 @@ void main(){
     for(int i = 0; i < btab.taille; i++){
         assert(tab.tab[i] == i + 1);
     }
+    tableau tabrand = rand_betw(7, -2, 6);
     assert(!(present_0(tab)));
     assert(premier_0(tab) == -1);
     assert(premier_02(tab) == -1);

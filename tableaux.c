@@ -138,7 +138,32 @@ tabtab elargi(tableau t){
     return *out;
 }
 //R.4-18
-
+tableau fusion(tableau t1, tableau t2){
+    tableau tf;
+    tf.taille = t1.taille + t2.taille;
+    tf.tab = malloc(tf.taille * sizeof(int));
+    int i = 0;
+    int j = 0;
+    while (i < t1.taille && j < t2.taille)
+    {
+        if(t1.tab[i] < t2.tab[j]){
+            tf.tab[i + j] = t1.tab[i];
+            i ++;
+        }else{
+            tf.tab[i + j] = t2.tab[j];
+            j ++;
+        }
+    }
+    while(i < t1.taille){
+        tf.tab[i + j] = t1.tab[i];
+        i ++;
+    }
+    while(j < t2.taille){
+        tf.tab[i + j] = t2.tab[j];
+        j ++;
+    }
+    return tf;
+}
 //R.4-32
 bool dichotrec(tableau t, int g, int d, int p){
     if(g >= d){

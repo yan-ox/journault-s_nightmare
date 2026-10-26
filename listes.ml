@@ -79,6 +79,22 @@ let rec apaugustin (l: 'a list list): 'a list =
   match l with
     |[] -> []
     |x :: tl -> x @ apaugustin tl
+
+(*R. 1-12*)
+let applat2 (l: 'a list list): 'a list =
+  let rec aux1 (ll: 'a list list)(sl: 'a list): 'a list =
+    match ll with
+    |[] -> List.rev sl
+    |x :: tl -> aux2 tl x sl
+
+  and aux2 (ll: 'a list list)(l: 'a list)(sl: 'a list): 'a list =
+    match l with
+    |[] -> aux1 ll sl
+    |x :: tl -> aux2 ll tl (x :: sl)
+  in aux1 l []
+
+(*R. 1-13*)
+(*R. 1-14*)
 (*R. 1-15*)
 let rec minmax (l : 'a list): 'a * 'a =
   match l with
@@ -99,6 +115,7 @@ let rec minmax2 (l : 'a list): 'a * 'a =
     |x :: tl -> minmaux l x x
     |_ -> failwith("liste vide")
 
+(*R. 1-17*)
 (*R. 1-18*)
 let souseq_crois (l : int list): int list list =
   let rec sousaux (l : int list)(sl : int list): int list * int list =
@@ -112,6 +129,7 @@ let souseq_crois (l : int list): int list list =
     |_ -> let l1, l2 = sousaux l [] in grosaux l1 (l2 :: sll)
   in grosaux l []
 
+(*R. 1-19*)
 (*R. 1-20*)
 let sort_map(l: 'a list)(k : int)(f: 'a->int): 'a list=
   let arr = Array.make (k + 1) [] in
@@ -159,6 +177,11 @@ let rec defile (f: 'a file): 'a *'a file =
     |[], [] -> failwith "pile"
     |g, x :: d' -> x, (g, d')
     |g, [] -> defile([], List.rev g)
+
+
+
+
+(*tests*)
 let test0 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: []
 let test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: []
 let tasty = test0 :: test2 :: []
@@ -173,3 +196,4 @@ let () = assert(applat tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 ::
 let () = assert(tri_fusion test0 = 3 :: 4 :: 32 :: 42 :: 67 :: 90 :: [])
 let () = assert(segregation test0 = (3 :: 67 :: 90 :: [], 4 :: 32 :: 42 :: []))
 let () = assert(souseq_crois test0 = [[3; 4; 67]; [32; 90]; [42]])
+let () = assert(applat2 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])

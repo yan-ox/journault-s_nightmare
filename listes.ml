@@ -94,6 +94,17 @@ let applat2 (l: 'a list list): 'a list =
   in aux1 l []
 
 (*R. 1-13*)
+let applat3 (l : 'a list list): 'a list =
+  let rec applaux (l : 'a list list)(sl : 'a list): 'a list =
+    match l with
+    |[] -> List.rev sl
+    |pl :: tgl -> begin
+      match pl with
+      |[] -> applaux tgl sl
+      |x :: tpl -> applaux (tpl :: tgl) (x :: sl)
+    end
+  in applaux l []
+
 (*R. 1-14*)
 (*R. 1-15*)
 let rec minmax (l : 'a list): 'a * 'a =
@@ -197,3 +208,4 @@ let () = assert(tri_fusion test0 = 3 :: 4 :: 32 :: 42 :: 67 :: 90 :: [])
 let () = assert(segregation test0 = (3 :: 67 :: 90 :: [], 4 :: 32 :: 42 :: []))
 let () = assert(souseq_crois test0 = [[3; 4; 67]; [32; 90]; [42]])
 let () = assert(applat2 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
+let () = assert(applat3 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])

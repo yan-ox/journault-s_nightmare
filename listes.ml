@@ -1,3 +1,25 @@
+(*prints*)
+let print_list(l: int list): unit =
+  Printf.printf "[";
+  let rec aux(l: int list): unit =
+    match l with
+    |x :: tl -> Printf.printf "%d, " x; aux tl
+    |[] -> Printf.printf "]\n"
+  in aux l
+
+let print_listlist(l: int list list): unit =
+  Printf.printf "[";
+  let rec petitaux(l: int list): unit =
+    match l with
+    |x :: tl -> Printf.printf "%d, " x; petitaux tl
+    |[] -> Printf.printf "]"
+  in
+  let rec grosaux (l: int list list): unit =
+    match l with
+    |x :: tl -> Printf.printf "["; petitaux x; grosaux tl
+    |[] -> Printf.printf "]\n"
+  in grosaux l
+
 (*R. 1-1*)
 let rec der_el (l: 'a list) : 'a = 
   match l with 
@@ -139,7 +161,7 @@ let minmax3 (l : 'a list): 'a * 'a =
 (*R. 1-18*)
 let souseq_crois (l : int list): int list list =
   let rec sousaux (l : int list)(sl : int list): int list * int list =
-    match l , sl with
+    match l, sl with
     |x :: tl, y :: _  when x >= y -> sousaux tl (x :: sl)
     |x :: tl, [] -> sousaux tl (x :: sl)
     |_ -> l , List.rev sl
@@ -150,7 +172,64 @@ let souseq_crois (l : int list): int list list =
   in grosaux l []
 
 (*R. 1-19*)
-let souseq_mono (l : int list): int int list =
+let souseq_mono (l : int list): int list list =
+  let rec sousaux (l : int list)(sl : int list)(b: bool option): int list * int list =
+    match b with
+    |None -> begin
+      match l, sl with
+      |x :: tl, y :: _ when x = y -> sousaux tl (x :: sl) b
+      |x :: tl, y :: _ -> sousaux tl (x :: sl) (Some (x < y))
+      |x :: tl, [] -> sousaux tl (x :: sl) b
+      |_-> l, List.rev sl
+    end
+    |Some true -> begin
+      match l, sl with
+      |x :: tl, y :: _  when x <= y -> sousaux tl (x :: sl) b
+      |x :: tl, [] -> sousaux tl (x :: sl) b (*useless*)
+      |_ -> l , List.rev sl
+    end
+    |Some false -> begin
+      match l, sl with
+      |x :: tl, y :: _  when x >= y -> sousaux tl (x :: sl) b
+      |x :: tl, [] -> sousaux tl (x :: sl) b (*useless*)
+      |_ -> l , List.rev sl
+    end
+  in let rec grosaux (l : int list)(sll : int list list):int list list =
+    match l with
+    |[] -> List.rev sll
+    |_ -> let l1, l2 = sousaux l [] None in grosaux l1 (l2 :: sll)
+  in grosaux l []
+
+(*prof*)
+type signe = bool option
+(* Some(true) indique une séquence croissante, Some(false) une décroiss. et
+None une suite ni strictement croiss, ni strict décroiss, ie cst *)
+
+let sous_sequences_monotones (l: 'a list): ('a list list) =
+(* Décompose la liste l est une liste de sous-séquences croissantes. *)
+  let diff_compatible_avec_signe (s: signe) (a:'a) (b:'a) : bool =
+   (* Teste si [a; b] est compatible avec la monotonie indiquée par s *)
+   s = None || (a <= b && s = Some true) || (a >= b && s = Some false) in
+ let raffine_avec_diff (s: signe) (a: 'a) (b: 'a) : signe =
+   (* Raffine la monotonie s afin qu'elle tienne compte de [a; b] *)
+   if a = b then s else if a < b then Some true else Some false in
+ let rec aux
+   (todo: 'a list) (lres: 'a list list)
+   (accu: 'a list) (csigne: signe) : 'a list list =
+   (* todo est la liste des éléments encore à traiter. lres est la liste
+   des sous séquences monotones déjà construites avec le début de l.
+   accu est la sous-séquence monotone en cours de construction, elle
+   est de monotonie indiquée par csigne *)
+   match todo, accu with
+   | [], [] -> []
+   | [], _ -> List.rev ((List.rev accu) :: lres)
+   | next::todo', [] -> aux todo' lres (next::accu) None
+   | next::todo', last::accu' ->
+   if diff_compatible_avec_signe csigne last next
+   then aux todo' lres (next::accu) (raffine_avec_diff csigne last next)
+   else aux todo' ((List.rev accu) :: lres) [next] None
+ in aux l [] [] None
+ 
 (*R. 1-20*)
 let sort_map(l: 'a list)(k : int)(f: 'a->int): 'a list=
   let arr = Array.make (k + 1) [] in
@@ -206,6 +285,7 @@ let rec defile (f: 'a file): 'a *'a file =
 let test0 = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: []
 let test2 = 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: []
 let tasty = test0 :: test2 :: []
+let raaaah = [1; 4; 5; 8; 7; 5; 2; 3; 4; 9; 3; 3; 3; 5; 5; 7; 2]
 let () = assert(der_el test0 = 42)
 let () = assert(der_el2 test0 = Some 42)
 let () = assert(miroir test0 = 42 :: 90 :: 32 :: 67 :: 4 :: 3 :: [])
@@ -220,3 +300,5 @@ let () = assert(souseq_crois test0 = [[3; 4; 67]; [32; 90]; [42]])
 let () = assert(applat2 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
 let () = assert(applat3 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
 let () = assert(applat4 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
+let () = assert(souseq_crois raaaah = [[1; 4; 5; 8]; [7]; [5]; [2; 3; 4; 9]; [3; 3; 3; 5; 5; 7]; [2]])
+let () = assert(souseq_mono raaaah = [[1; 4; 5; 8]; [7; 5; 2]; [3; 4; 9]; [3; 3; 3; 5; 5; 7]; [2]])

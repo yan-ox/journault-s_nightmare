@@ -106,12 +106,15 @@ let applat3 (l : 'a list list): 'a list =
   in applaux l []
 
 (*R. 1-14*)
+let applat4 (l : 'a list list): 'a list =
+  List.rev (List.fold_left (fun acc1 pl -> List.fold_left (fun acc2 x -> x :: acc2) acc1 pl) [] l)
+
 (*R. 1-15*)
 let rec minmax (l : 'a list): 'a * 'a =
   match l with
     |x :: [] -> x, x
     |x :: tl -> let mi, ma = minmax tl in min x mi, max x ma
-    |_ -> failwith("liste vide")
+    |_ -> raise(Invalid_argument "liste vide")
     
 (*R. 1-16*)
 let rec minmax2 (l : 'a list): 'a * 'a =
@@ -124,9 +127,15 @@ let rec minmax2 (l : 'a list): 'a * 'a =
   in
   match l with
     |x :: tl -> minmaux l x x
-    |_ -> failwith("liste vide")
+    |_ -> raise(Invalid_argument "liste vide")
 
 (*R. 1-17*)
+let minmax3 (l : 'a list): 'a * 'a =
+    match l with
+    |[] -> raise(Invalid_argument "liste vide")
+    |p :: tl -> List.fold_left (fun acc x -> 
+      let mi, ma = acc in (min x mi, max x ma)) (p, p) tl
+
 (*R. 1-18*)
 let souseq_crois (l : int list): int list list =
   let rec sousaux (l : int list)(sl : int list): int list * int list =
@@ -141,6 +150,7 @@ let souseq_crois (l : int list): int list list =
   in grosaux l []
 
 (*R. 1-19*)
+let souseq_mono (l : int list): int int list =
 (*R. 1-20*)
 let sort_map(l: 'a list)(k : int)(f: 'a->int): 'a list=
   let arr = Array.make (k + 1) [] in
@@ -209,3 +219,4 @@ let () = assert(segregation test0 = (3 :: 67 :: 90 :: [], 4 :: 32 :: 42 :: []))
 let () = assert(souseq_crois test0 = [[3; 4; 67]; [32; 90]; [42]])
 let () = assert(applat2 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
 let () = assert(applat3 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
+let () = assert(applat4 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])

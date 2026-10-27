@@ -1,3 +1,11 @@
+(*prints*)
+let print_tabi (t: int array)(d: int)(f: int): unit =
+    Printf.printf "[";
+    for i = d to f do 
+        Printf.printf "%d, " t.(i)
+    done; 
+    Printf.printf "]\n"
+
 (*R.2-1*)
 let prem_zero (tab : int array): int =
     let n = Array.length tab in
@@ -6,6 +14,7 @@ let prem_zero (tab : int array): int =
         incr i
     done;
     if (!i >= n) then -1 else !i
+
 (*R.2-2*)
 exception Found of int
 let prem_zero2 (tab : int array) : int =
@@ -24,6 +33,7 @@ let der_zero (tab : int array) : int =
         n := !n - 1;
     done;
     !n
+
 (*R.2-4*)
 let is_there_zero (tab : int array) : bool =
     let n = Array.length tab in
@@ -32,6 +42,7 @@ let is_there_zero (tab : int array) : bool =
         i := !i + 1
     done;
     tab.(!i) = 0
+
 (*R.2-5*)
 exception Foundi
 let is_there_zero2 (tab : int array) : bool =
@@ -62,6 +73,7 @@ let min (tab : int  array) : int =
             begin cache := tab.(i); icache := i end
     done;
     !icache
+
 (*R.2-10*)
 let accu (tab : int array) : int array =
     let res = Array.make (Array.length tab) tab.(0) in
@@ -71,6 +83,13 @@ let accu (tab : int array) : int array =
         end
     done;
     res
+
+(*R. 2-11*)
+let add_ind(tab : int list array): unit =
+    for i = 0 to (Array.length tab - 1) do 
+        tab.(i) <- i :: tab.(i)
+    done 
+
 (*R.2-15*)
 let decale (tab : int array) (g : int) (d : int) : unit =
     let i = ref d in
@@ -78,12 +97,6 @@ let decale (tab : int array) (g : int) (d : int) : unit =
         tab.(!i) <- tab.(!i-1);
         i := !i - 1
     done
-
-(*R. 2-11*)
-let add_ind(tab : int list array): unit =
-    for i = 0 to (Array.length tab - 1) do 
-        tab.(i) <- i :: tab.(i)
-    done 
 
 (*R.2-16*)
 let tri_inser (tab : int array) : unit =
@@ -96,6 +109,41 @@ let tri_inser (tab : int array) : unit =
         done;
         tab.(!pos) <- cache
     done
+
+(*R.2-18*)
+let partition (t: 'a array)(d: int)(f: int)(ip: int): int =
+    assert(ip <= f && ip >=d);
+    let swap(a : int)(b : int): unit = let temp = t.(a) in t.(a) <- t.(b); t.(b) <- temp in
+    swap ip f;
+    let j = ref d in
+    for i = d to f-1 do 
+        if t.(i) < t.(f) then (swap !j i; incr j)
+    done;
+    swap !j f;
+    !j
+
+(*R.2-19*)
+let quicksort (t: 'a array): unit =
+    let mini (a: int)(b: int) =
+        if t.(a) < t.(b) then a else b in
+    let maxi (a: int)(b: int) =
+        if t.(a) > t.(b) then a else b in
+    let make_pivot (d: int)(f: int)(m: int): unit =
+        let nd, nf = mini (mini d m) f, maxi (maxi d m) f in
+        let nm = ref d in
+        let tt = [|f; m|] in
+        for i = 0 to 1 do if nd <> tt.(i) && nf <> tt.(i) then nm := tt.(i) done;
+        let td, tm, tf = t.(nd), t.(!nm), t.(nf) in
+        t.(d) <- td; t.(m) <- tm; t.(f) <- tf in
+    let rec quickaux (d: int)(f: int): unit =
+        if d < f then begin
+        let m = (d + f) / 2 in
+        make_pivot d f m;
+        let q = partition t d f m in
+        quickaux d (q-1); quickaux (q+1) f 
+        end in
+    quickaux 0 (Array.length t - 1)
+
 (*R.2-21*)
 let list_to_string (l : char list): string =
     let rec straux (l : char list) (s : string): string =
@@ -103,9 +151,11 @@ let list_to_string (l : char list): string =
             |x :: tl -> straux tl (s ^ String.make 1 x)
             |_ -> s
     in straux l ""
+
 (*R.2-22*)
 let string_to_list (s : string): char list =
     List.rev (String.fold_left (fun acc el -> el :: acc) [] s)
+
 (*R.2-23*)
 exception Lettre 
 let string_to_int (s : string): int option=
@@ -121,6 +171,7 @@ let string_to_int (s : string): int option=
         Some !acc
     with
         |Lettre -> None
+
 (*R.2-24*)
 let dichot (t : int array) (p : int): bool =
     let rec dicaux (t : int array) (p : int) (mini : int) (maxi :int): bool =
@@ -133,6 +184,7 @@ let dichot (t : int array) (p : int): bool =
         else 
             dicaux t p mid maxi
     in dicaux t p 0 ((Array.length t) - 1)
+
 (*R.2-25*)
 let dichot2 (t : int array) (p : int): bool =
     let mini, maxi = ref 0, ref ((Array.length t) - 1)in
@@ -183,3 +235,5 @@ let () = assert(string_to_int nombre = Some 123)
 let () = assert(dichot tab 1)
 let () = assert(dichot2 tab 1)
 let () = assert(sum tab = 32)
+let () = quicksort tab1
+let () = assert(tab1 = [|1; 2; 3; 4; 4; 5; 5; 8; 9|])

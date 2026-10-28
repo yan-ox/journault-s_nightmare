@@ -7,8 +7,21 @@ bool array array
 type graphe_mat_pond = (* graphes par matrice d'adjacence *)
 int array array
 
-(*R.6-10*)
+(*R.6-1*)
+let est_arrete_mat (g: graphe_mat)(i: int)(j: int): bool = 
+    g.(i).(j)
 
+(*R.6-2*)
+let est_arrete_adj (g: graphe_adj)(i: int)(j: int): bool =
+    List.mem j g.(i)
+
+(*R.6-3*)
+let 
+(*R.6-4*)
+(*R.6-5*)
+(*R.6-6*)
+(*R.6-7*)
+(*R.6-10*)
 let addf (a : int) (b : int): int=
     if a = -1 || b = -1 then
         -1
@@ -33,6 +46,19 @@ let floyd_marshmall (g : graphe_mat_pond): graphe_mat_pond =
         done;
     done;
     !old
+
+(*R.6-11*)
+(*R.6-12*)
+(*R.6-13*)
+(*R.6-14*)
+(*R.6-15*)
+(*R.6-17*)
+(*R.6-19*)
+(*R.6-20*)
+(*R.6-21*)
+(*R.6-22*)
+
+(*test*)
 let g1 : graphe_mat_pond =
   [|
     [|-1; 5; 2|];  (* arcs depuis 0 vers 0,1,2 *)

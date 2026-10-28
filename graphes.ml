@@ -1,3 +1,13 @@
+(*prints*)
+let print_list(l: int list): unit =
+  Printf.printf "[";
+  let rec aux(l: int list): unit =
+    match l with
+    |x :: tl -> Printf.printf "%d, " x; aux tl
+    |[] -> Printf.printf "]\n"
+  in aux l
+
+(*types*)
 type graphe_adj = (* graphes par table de listes d'adjacence *)
 int list array
 
@@ -93,9 +103,73 @@ let floyd_marshmall (g : graphe_mat_pond): graphe_mat_pond =
     !old
 
 (*R.6-11*)
+let parcours_prof_rec (g: graphe_adj): int list =
+    let n = Array.length g in
+    let atraiter = Array.make n true in
+    let sl = ref [] in
+    let rec parcaux (i: int): unit=
+        if atraiter.(i) then begin
+            atraiter.(i) <- false;
+            sl := i :: !sl;
+            List.iter (fun x -> parcaux x) g.(i)
+        end in
+    for i = 0 to n-1 do 
+        parcaux i 
+    done;
+    List.rev !sl
+
 (*R.6-12*)
+let parcours_prof (g: graphe_adj): int list =
+    let n = Array.length g in
+    let atraiter = Array.make n true in
+    let sl = ref [] in
+    let p = Stack.create () in
+    for i = 0 to n-1 do 
+        Stack.push i p;
+        while not (Stack.is_empty p) do 
+            let s = Stack.pop p in
+            if atraiter.(s) then begin
+                atraiter.(s) <- false;
+                sl := i :: !sl;
+                List.iter (fun x -> Stack.push x p) g.(s)
+            end
+        done
+    done;
+    List.rev !sl
+
 (*R.6-13*)
+let parcours_prof (g: graphe_adj): int list =
+    let n = Array.length g in
+    let atraiter = Array.make n true in
+    let sl = ref [] in
+    let p = Queue.create () in
+    for i = 0 to n-1 do 
+        Queue.push i p;
+        while not (Queue.is_empty p) do 
+            let s = Queue.pop p in
+            if atraiter.(s) then begin
+                atraiter.(s) <- false;
+                sl := i :: !sl;
+                List.iter (fun x -> Queue.push x p) g.(s)
+            end
+        done
+    done;
+    List.rev !sl
+
 (*R.6-14*)
+let est_acces (g: graphe_adj)(i: int)(j: int): bool =
+    let n = Array.length g in
+    let atraiter = Array.make n true in
+    let rec parcaux (s: int): bool=
+        if atraiter.(s) then begin
+            atraiter.(s) <- false;
+            if s = j then true
+            else
+            List.fold_left (fun acc x -> acc || parcaux x) false g.(s)
+        end
+        else false in
+    parcaux i
+
 (*R.6-15*)
 (*R.6-17*)
 (*R.6-19*)

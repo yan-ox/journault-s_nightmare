@@ -185,6 +185,19 @@ let est_connexe_no (g: graphe_adj): bool =
     not (Array.mem true atraiter)
 
 (*R.6-17*)
+let decomp_connexe_no (g: graphe_adj): int array =
+    let n = Array.length g in
+    let connexe = Array.make n (-1) in
+    let rec parcaux (i: int)(s: int): unit=
+        if connexe.(s) = -1 then begin
+            connexe.(s) <- i;
+            List.iter (fun x -> parcaux i x) g.(s)
+        end in
+    for i = 0 to n-1 do 
+        parcaux i i
+    done;
+    connexe
+
 (*R.6-19*)
 (*R.6-20*)
 (*R.6-21*)

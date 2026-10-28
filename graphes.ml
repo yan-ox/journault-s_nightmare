@@ -171,6 +171,19 @@ let est_acces (g: graphe_adj)(i: int)(j: int): bool =
     parcaux i
 
 (*R.6-15*)
+let est_connexe_no (g: graphe_adj): bool =
+    let n = Array.length g in
+    let atraiter = Array.make n true in
+    let rec parcaux (i: int): unit=
+        if atraiter.(i) then begin
+            atraiter.(i) <- false;
+            List.iter (fun x -> parcaux x) g.(i)
+        end in
+    for i = 0 to n-1 do 
+        parcaux i 
+    done;
+    not (Array.mem true atraiter)
+
 (*R.6-17*)
 (*R.6-19*)
 (*R.6-20*)

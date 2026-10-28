@@ -138,7 +138,7 @@ let parcours_prof (g: graphe_adj): int list =
     List.rev !sl
 
 (*R.6-13*)
-let parcours_prof (g: graphe_adj): int list =
+let parcours_larg (g: graphe_adj): int list =
     let n = Array.length g in
     let atraiter = Array.make n true in
     let sl = ref [] in
@@ -182,7 +182,7 @@ let est_connexe_no (g: graphe_adj): bool =
     for i = 0 to n-1 do 
         parcaux i 
     done;
-    not (Array.mem true atraiter)
+    (n = 0) || not (Array.mem true atraiter)
 
 (*R.6-17*)
 let decomp_connexe_no (g: graphe_adj): int array =
@@ -199,6 +199,26 @@ let decomp_connexe_no (g: graphe_adj): int array =
     connexe
 
 (*R.6-19*)
+exception Trouve of int
+let dist (g: graphe_adj)(i: int)(j: int): int =
+    let n = Array.length g in
+    let atraiter = Array.make n true in
+    let p = Queue.create () in
+    try
+    Queue.push (i, 0) p;
+    while not (Queue.is_empty p) do 
+        let s, d = Queue.pop p in
+        if atraiter.(s) then begin
+            atraiter.(s) <- false;
+            if s = j then raise (Trouve d) else
+            List.iter (fun x -> Queue.push (x, d + 1) p) g.(s)
+        end
+    done;
+    failwith "sommets inaccessibles"
+    with
+    |Trouve x -> x
+    
+
 (*R.6-20*)
 (*R.6-21*)
 (*R.6-22*)

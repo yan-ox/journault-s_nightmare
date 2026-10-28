@@ -217,11 +217,70 @@ let dist (g: graphe_adj)(i: int)(j: int): int =
     failwith "sommets inaccessibles"
     with
     |Trouve x -> x
-    
 
 (*R.6-20*)
+let tri_topo (g: graphe_adj): int list =
+    let n = Array.length g in
+    let atraiter = Array.make n true in
+    let sl = ref [] in
+    let rec parcaux (i: int): unit=
+        if atraiter.(i) then begin
+            atraiter.(i) <- false;
+            List.iter (fun x -> parcaux x) g.(i);
+            sl := i :: !sl
+        end in
+    for i = 0 to n-1 do 
+        parcaux i 
+    done;
+    !sl
+
 (*R.6-21*)
+exception ACircuit
+let acircuit (g: graphe_adj): bool =
+    let n = Array.length g in
+    let atraiter = Array.make n None in
+    let rec parcaux (i: int): bool=
+        match atraiter.(i) with
+        |None -> atraiter.(i) <- Some true; 
+            let bole = List.fold_left (fun acc x -> acc || parcaux x) false g.(i) in
+            atraiter.(i) <- Some false; bole 
+        |Some b -> b
+        in
+    try
+    for i = 0 to n-1 do 
+        if parcaux i then raise ACircuit
+    done;
+    false
+    with
+    |ACircuit -> true
+
 (*R.6-22*)
+exception Circuit of int list
+let circuiteur (g: graphe_adj): int list option =
+    let n = Array.length g in
+    let atraiter = Array.make n None in
+    let sl = ref [] in
+    let rec parcaux (i: int): bool=
+        match atraiter.(i) with
+        |None -> atraiter.(i) <- Some true; 
+            let bole = List.fold_left (fun acc x -> acc || parcaux x) false g.(i) in
+            if bole then begin 
+                match atraiter.(i) with
+                |None -> raise (Circuit !sl)
+                |_ -> sl := i :: !sl
+            end;
+            atraiter.(i) <- Some false; bole 
+        |Some b -> if b then (atraiter.(i) <- None; sl := i :: !sl);
+            b
+        in
+    try
+    for i = 0 to n-1 do 
+        sl := [];
+        ignore (parcaux i)
+    done;
+    None
+    with
+    |Circuit tl -> Some tl
 
 (*test*)
 let g1 : graphe_mat_pond =

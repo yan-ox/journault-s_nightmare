@@ -11,7 +11,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "\"C:\\Program Files\\mingw32\\bin\\gcc.exe\""
+            "compilerPath": "\"C:\\MinGW\\bin\\gcc.exe\""
         }
     ],
     "version": 4

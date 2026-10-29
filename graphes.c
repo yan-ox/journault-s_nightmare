@@ -125,55 +125,106 @@ void file_libere(file f) {
 }
 
 //R.7-1
-void aux_prof(graphe g, int s, bool** bt){
-    if ((*bt)[s]){
+void aux_prof(graphe g, int s, bool** bt) {
+    if ((*bt)[s]) {
         (*bt)[s] = false;
         printf("%d ", s);
         list temp = g->contenu[s];
-        while(temp != NULL){
+        while(temp != NULL) {
             aux_prof(g, temp->elem, bt);
             temp = temp->suivant;
         }
     }
 }
 
-void prof_rec(graphe g){
+void prof_rec(graphe g) {
     bool** bt = malloc(sizeof(bool*));
     *bt = malloc(g->taille * sizeof(bool));
-    for(int i = 0; i < g->taille; i ++){(*bt)[i] = false;}
-    for(int i = 0; i < g->taille; i ++){
+    for(int i = 0; i < g->taille; i ++) {(*bt)[i] = false;}
+    for(int i = 0; i < g->taille; i ++) {
         aux_prof(g, i, bt);
     }
+    free(*bt);
+    free(bt);
 }
 
 //R.7-2
-void prof(graphe g){
+void prof(graphe g) {
     bool* bt = malloc(g->taille * sizeof(bool));
-    for(int i = 0; i < g->taille; i ++){bt[i] = false;}
-    int* p = malloc(g->taille * sizeof(int));
-    int top = -1;
-    for(int i = 0; i < g->taille; i ++){
-        top ++;
-        p[top] = i;
-        while(top != -1){
-            int cur = p[top];
-            top --;
-            if(bt[cur]){
+    for(int i = 0; i < g->taille; i ++) {bt[i] = false;}
+    pile p = pile_cree_pile();
+    for(int i = 0; i < g->taille; i ++) {
+        pile_empile(p, i);
+        while(not(pile_est_vide(p))) {
+            int cur = pile_depile(p);
+            if(bt[cur]) {
+                bt[cur] = false;
                 printf("%d ", cur);
                 list temp = g->contenu[cur];
-                while(temp != NULL){
-                    top ++;
-                    p[top] = temp->elem;
+                while(temp != NULL) {
+                    pile_empile(p, cur);
                     temp = temp->suivant;
                 }
             }
         }
     }
+    pile_libere(p);
+    free(bt);
 }
 
 //R.7-3
+void larg_pile(graphe g) {
+    bool* bt = malloc(g->taille * sizeof(bool));
+    for(int i = 0; i < g->taille; i ++) {bt[i] = false;}
+    pile p1 = pile_cree_pile();
+    pile p2 = pile_cree_pile();
+    for(int i = 0; i < g->taille; i ++) {
+        pile_empile(p1, i);
+        while(!(pile_est_vide(p1) && pile_est_vide(p2))) {
+            if(pile_est_vide(p2)) {transvase(p1, p2);}
+            int cur = pile_depile(p2);
+            if(bt[cur]) {
+                bt[cur] = false;
+                printf("%d ", cur);
+                list temp = g->contenu[cur];
+                while(temp != NULL) {
+                    pile_empile(p1, cur);
+                    temp = temp->suivant;
+                }
+            }
+        }
+    }
+    pile_libere(p1);
+    pile_libere(p2);
+    free(bt);
+}
+
 //R.7-4
+void larg_file(graphe g) {
+    bool* bt = malloc(g->taille * sizeof(bool));
+    for(int i = 0; i < g->taille; i ++) {bt[i] = true;}
+    file f = file_cree_file(g->taille * g->taille);
+    for(int i = 0; i < g->taille; i ++) {
+        file_enfile(f, i);
+        while(!file_est_vide(f)) {
+            int cur = file_defile(f);
+            if(bt[cur]) {
+                bt[cur] = false;
+                printf("%d, ", cur);
+                for(list l = g->contenu[cur]; l != NULL; l = l->suivant) {
+                    file_enfile(f, l->elem);
+                }
+            }
+        }
+    }
+    file_libere(f);
+    free(bt);
+}
+
 //R.7-5
+bool est_circuique(graphe g) {
+    
+}
 
 void main(){
     printf("hello world");

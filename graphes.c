@@ -155,7 +155,7 @@ void prof(graphe g) {
     pile p = pile_cree_pile();
     for(int i = 0; i < g->taille; i ++) {
         pile_empile(p, i);
-        while(not(pile_est_vide(p))) {
+        while(!(pile_est_vide(p))) {
             int cur = pile_depile(p);
             if(bt[cur]) {
                 bt[cur] = false;
@@ -223,7 +223,28 @@ void larg_file(graphe g) {
 
 //R.7-5
 bool est_circuique(graphe g) {
-    
+    int* bt = malloc(g->taille * sizeof(int));
+    for(int i = 0; i < g->taille; i ++) {bt[i] = -1;}
+    pile p = pile_cree_pile();
+    for(int i = 0; i < g->taille; i ++) {
+        pile_empile(p, i);
+        while(!(pile_est_vide(p))) {
+            int cur = pile_depile(p);
+            if(bt[cur] != -1) {
+                if(bt[cur] == 0) {return true;}
+                bt[cur] = 0;
+                list temp = g->contenu[cur];
+                while(temp != NULL) {
+                    pile_empile(p, cur);
+                    temp = temp->suivant;
+                }
+                bt[cur] = 1;
+            }
+        }
+    }
+    pile_libere(p);
+    free(bt);
+    return false;
 }
 
 void main(){

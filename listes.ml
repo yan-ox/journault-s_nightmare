@@ -278,6 +278,42 @@ let rec defile (f: 'a file): 'a *'a file =
     |g, x :: d' -> x, (g, d')
     |g, [] -> defile([], List.rev g)
 
+(*R. 1-23*)
+let permut(l: 'a list): 'a list list =
+  let sl = ref [] in
+  let static = Array.of_list l in
+  let n = Array.length static in
+  let bole = Array.make n false in
+  let pris = Array.make n 0 in
+  let rec permaux(i: int): unit=
+      if i = n then sl := (Array.to_list pris) :: !sl
+      else begin
+        for j = 0 to n-1 do 
+          if(not bole.(j)) then begin
+            pris.(i) <- static.(j);
+            bole.(j) <- true;
+            permaux(i + 1);
+            bole.(j) <- false
+          end
+        done end
+      in
+  permaux 0;
+  !sl
+          
+(*R. 1-24*)
+let permut_bool(n : int): bool list list =
+  let sl = ref [] in
+  let t = Array.make n false in
+  let rec permaux(i: int): unit=
+      if i = n then sl := (Array.to_list t) :: !sl
+      else begin
+        t.(i) <- true;
+        permaux(i + 1);
+        t.(i) <- false;
+        permaux(i + 1) end
+      in
+  permaux 0;
+  !sl
 
 
 
@@ -302,3 +338,4 @@ let () = assert(applat3 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :
 let () = assert(applat4 tasty = 3 :: 4 :: 67 :: 32 :: 90 :: 42 :: 3 :: 4 :: 67 :: 32 :: 90 :: 43 :: [])
 let () = assert(souseq_crois raaaah = [[1; 4; 5; 8]; [7]; [5]; [2; 3; 4; 9]; [3; 3; 3; 5; 5; 7]; [2]])
 let () = assert(souseq_mono raaaah = [[1; 4; 5; 8]; [7; 5; 2]; [3; 4; 9]; [3; 3; 3; 5; 5; 7]; [2]])
+let () = print_listlist((permut test0))

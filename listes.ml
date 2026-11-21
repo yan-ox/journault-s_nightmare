@@ -315,6 +315,19 @@ let permut_bool(n : int): bool list list =
   permaux 0;
   !sl
 
+(*R. 1-25*)
+let rec prod_apply (l1: 'a list)(l2: 'b list)(f: 'a -> 'b -> unit): unit =
+  let rec aux (l: 'b list) (f: 'b -> unit): unit =
+    match l with
+    |b :: tl -> f b; aux tl f
+    |_ ->() in
+  match l1 with 
+  |a :: tl -> aux l2 (f a); prod_apply tl l2 f
+  |_ -> ()
+
+(*R. 1-26*)
+let prod_apply (l1: 'a list)(l2: 'b list)(f: 'a -> 'b -> unit): unit =
+  List.iter (fun a -> List.iter (f a) l2) l1
 
 
 (*tests*)

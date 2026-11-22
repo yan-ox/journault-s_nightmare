@@ -185,6 +185,22 @@ let quicksort (t: 'a array): unit =
     quickaux 0 (Array.length t - 1)
 
 (*R. 2-20*)
+let mediane(t: int array): int =
+    let n = Array.length t in
+    let med = ref t.(0) in
+    let med_score = ref n in
+    for i = 0 to n-1 do 
+        let cpt = Array.make 2 0 in
+        for j = 0 to n-1 do 
+            if t.(j) < t.(i) then cpt.(0) <- cpt.(0) + 1
+            else cpt.(1) <- cpt.(1) + 1
+        done ;
+        let score = abs (cpt.(0) - cpt.(1)) in
+        if score < !med_score then 
+            (med_score := score; med := t.(i))
+    done;
+    !med
+
 (*R. 2-21*)
 let list_to_string (l : char list): string =
     let rec straux (l : char list) (s : string): string =
@@ -268,6 +284,7 @@ let () = assert(min tab1 = 4)
 let () = assert(accu tab = [|3; 8; 12; 12; 13; 15; 15; 24; 32|])
 let () = decale tab1 1 6
 let () = assert(tab1 = [|3; 5; 5; 4; 4; 1; 2; 9; 8|])
+let () = assert(mediane tab = 3)
 let () = tri_selec tab
 let () = assert(tab = [|0; 0; 1; 2; 3; 4; 5; 8; 9|])
 let () = assert(string_to_list mots = mot)

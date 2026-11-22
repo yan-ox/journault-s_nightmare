@@ -15,7 +15,7 @@ let prem_zero (tab : int array): int =
     done;
     if (!i >= n) then -1 else !i
 
-(*R.2-2*)
+(*R. 2-2*)
 exception Found of int
 let prem_zero2 (tab : int array) : int =
     let n = Array.length tab in
@@ -26,7 +26,7 @@ let prem_zero2 (tab : int array) : int =
     with
         |Found(i)-> i
 
-(*R.2-3*)
+(*R. 2-3*)
 let der_zero (tab : int array) : int =
     let n = ref ((Array.length tab) - 1) in
     while (!n >= 0 && tab.(!n) <> 0) do
@@ -34,7 +34,7 @@ let der_zero (tab : int array) : int =
     done;
     !n
 
-(*R.2-4*)
+(*R. 2-4*)
 let is_there_zero (tab : int array) : bool =
     let n = Array.length tab in
     let i = ref 0 in
@@ -43,7 +43,7 @@ let is_there_zero (tab : int array) : bool =
     done;
     tab.(!i) = 0
 
-(*R.2-5*)
+(*R. 2-5*)
 exception Foundi
 let is_there_zero2 (tab : int array) : bool =
     let test (x : int) : unit = if x = 0 then raise Foundi in
@@ -62,7 +62,7 @@ let sum (tab : int array): int=
     done;
     !acc
 
-(*R.2-8*)
+(*R. 2-8*)
 let min (tab : int  array) : int =
     let n = Array.length tab in
     if n = 0 then raise (Invalid_argument "tableau de taille 0") else
@@ -74,7 +74,7 @@ let min (tab : int  array) : int =
     done;
     !icache
 
-(*R.2-10*)
+(*R. 2-10*)
 let accu (tab : int array) : int array =
     let res = Array.make (Array.length tab) tab.(0) in
     for i = 1 to ((Array.length tab) -1) do
@@ -90,7 +90,32 @@ let add_ind(tab : int list array): unit =
         tab.(i) <- i :: tab.(i)
     done 
 
-(*R.2-15*)
+(*R. 2-12*)
+let ajout_ent(tab: int list array)(x: int): int list array =
+    Array.map (fun l -> x :: l) tab
+
+(*R. 2-13*)
+let max_occ(t: int array)(m: int): int =
+    let cpt_t = Array.make m 0 in
+    Array.iter (fun x -> cpt_t.(x) <- cpt_t.(x) + 1) t;
+    let aux (mi, m, i) x =
+        if x > m then (i, x, i+1)
+        else (mi, m, i + 1) in
+    let mi, _, _ = Array.fold_left aux (-1, -1, 0) cpt_t in
+    mi
+
+(*R. 2-14*)
+let bubble_sort (t: 'a array): unit =
+    let rec swap(i: int)(j: int): unit =
+        let temp = t.(i) in t.(i) <- t.(j); t.(j) <- temp in
+    let n = Array.length t in
+    for i = 0 to n-1 do 
+        for j = 0 to (n-2-i) do 
+            if t.(j) > t.(j+1) then swap j (j+1)
+        done
+    done
+
+(*R. 2-15*)
 let decale (tab : int array) (g : int) (d : int) : unit =
     let i = ref d in
     while !i > g do
@@ -98,7 +123,7 @@ let decale (tab : int array) (g : int) (d : int) : unit =
         i := !i - 1
     done
 
-(*R.2-16*)
+(*R. 2-16*)
 let tri_inser (tab : int array) : unit =
     for i = 1 to ((Array.length tab) - 1) do
         let pos = ref i in
@@ -110,7 +135,8 @@ let tri_inser (tab : int array) : unit =
         tab.(!pos) <- cache
     done
 
-(*R.2-18*)
+(*R. 2-17*)
+(*R. 2-18*)
 let partition (t: 'a array)(d: int)(f: int)(ip: int): int =
     assert(ip <= f && ip >=d);
     let swap(a : int)(b : int): unit = let temp = t.(a) in t.(a) <- t.(b); t.(b) <- temp in
@@ -144,7 +170,8 @@ let quicksort (t: 'a array): unit =
         end in
     quickaux 0 (Array.length t - 1)
 
-(*R.2-21*)
+(*R. 2-20*)
+(*R. 2-21*)
 let list_to_string (l : char list): string =
     let rec straux (l : char list) (s : string): string =
         match l with
@@ -152,11 +179,11 @@ let list_to_string (l : char list): string =
             |_ -> s
     in straux l ""
 
-(*R.2-22*)
+(*R. 2-22*)
 let string_to_list (s : string): char list =
     List.rev (String.fold_left (fun acc el -> el :: acc) [] s)
 
-(*R.2-23*)
+(*R. 2-23*)
 exception Lettre 
 let string_to_int (s : string): int option=
     let acc = ref ((int_of_char s.[0])  - (int_of_char '0')) in
@@ -172,7 +199,7 @@ let string_to_int (s : string): int option=
     with
         |Lettre -> None
 
-(*R.2-24*)
+(*R. 2-24*)
 let dichot (t : int array) (p : int): bool =
     let rec dicaux (t : int array) (p : int) (mini : int) (maxi :int): bool =
         if mini >= maxi && not (p = t.(mini)) then false else
@@ -185,7 +212,7 @@ let dichot (t : int array) (p : int): bool =
             dicaux t p mid maxi
     in dicaux t p 0 ((Array.length t) - 1)
 
-(*R.2-25*)
+(*R. 2-25*)
 let dichot2 (t : int array) (p : int): bool =
     let mini, maxi = ref 0, ref ((Array.length t) - 1)in
     let mid = ref ((!mini + !maxi) / 2) in
@@ -198,6 +225,7 @@ let dichot2 (t : int array) (p : int): bool =
     done;
     p = t.(!mid)
 
+(*R. 2-26*)
 let rec expo (n : int) (x : int) : int =
     if n = 0 then
         1

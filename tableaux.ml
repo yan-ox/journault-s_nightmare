@@ -256,6 +256,16 @@ let dichot2 (t : int array) (p : int): bool =
     p = t.(!mid)
 
 (*R. 2-26*)
+let incr_bin(t: bool array): unit =
+    let n = Array.length t in
+    let i = ref (n-1) in
+    while !i > 0 && t.(!i) do 
+        t.(!i) <- false;
+        i := !i - 1
+    done;
+    if not t.(!i) then t.(!i) <- true
+    else raise(Invalid_argument("dernier"))
+
 let rec expo (n : int) (x : int) : int =
     if n = 0 then
         1

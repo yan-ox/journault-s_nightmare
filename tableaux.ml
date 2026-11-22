@@ -106,7 +106,7 @@ let max_occ(t: int array)(m: int): int =
 
 (*R. 2-14*)
 let bubble_sort (t: 'a array): unit =
-    let rec swap(i: int)(j: int): unit =
+    let swap(i: int)(j: int): unit =
         let temp = t.(i) in t.(i) <- t.(j); t.(j) <- temp in
     let n = Array.length t in
     for i = 0 to n-1 do 
@@ -136,6 +136,20 @@ let tri_inser (tab : int array) : unit =
     done
 
 (*R. 2-17*)
+let tri_selec(t: 'a array): unit =
+    let swap(i: int)(j: int): unit =
+        let temp = t.(i) in t.(i) <- t.(j); t.(j) <- temp in
+    let n = Array.length t in
+    for i = 0 to n-1 do 
+        let min = ref t.(i) in
+        let mini = ref i in
+        for j = i+1 to n-1 do 
+            if t.(j) < !min then (min := t.(j); mini := j)
+        done;
+        swap i !mini
+    done
+
+
 (*R. 2-18*)
 let partition (t: 'a array)(d: int)(f: int)(ip: int): int =
     assert(ip <= f && ip >=d);
@@ -254,7 +268,7 @@ let () = assert(min tab1 = 4)
 let () = assert(accu tab = [|3; 8; 12; 12; 13; 15; 15; 24; 32|])
 let () = decale tab1 1 6
 let () = assert(tab1 = [|3; 5; 5; 4; 4; 1; 2; 9; 8|])
-let () = tri_inser tab
+let () = tri_selec tab
 let () = assert(tab = [|0; 0; 1; 2; 3; 4; 5; 8; 9|])
 let () = assert(string_to_list mots = mot)
 let () = assert(list_to_string mot = mots)
